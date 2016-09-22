@@ -14,9 +14,8 @@ MERN is a scaffolding tool which makes it easy to build isomorphic apps using Mo
 ## Quickstart
 
 ```
-  npm install -g mern-cli
-  mern init your_new_app
-  cd your_new_app
+  git clone https://github.com/Hashnode/mern-starter.git
+  cd mern-starter
   npm install
   npm start
 ```
@@ -153,21 +152,6 @@ Assets can be kept where you want and can be imported into your js files or css 
 ### ES6 support
 We use babel to transpile code in both server and client with `stage-0` plugin. So, you can use both ES6 and experimental ES7 features.
 
-### Docker
-There are docker configurations for both development and production.
-
-To run docker for development,
-```
-docker-compose -f docker-compose-development.yml build
-docker-compose -f docker-compose-development.yml up
-```
-
-To run docker for production,
-```
-docker-compose build
-docker-compose up
-```
-
 ### Make your MERN
 In this version, we enabled the `mern-cli` to clone not only this project but also the variants of `mern-starter` like one project with MaterialUI or JWT auth. To make your version of MERN, follow these steps
 
@@ -187,67 +171,3 @@ In this version, we enabled the `mern-cli` to clone not only this project but al
 
 5. Add your project details to `variants.json` in the cloned project and send a pull request.
 
-### Modifying Generators
-
-#### mern.json
-It contains a blueprints array. Each object in it is the config for a generator. A blueprint config contains the name, description, usage, and files array. An example blueprint config
-```
-{
-  "name": "dumb-s",
-  "description": "Generates a dumb react component in shared components",
-  "usage": "dumb-s [component-name]",
-  "files": [
-    {
-      "blueprint-path": "config/blueprints/dumb-component.ejs",
-      "target-path": "client/components/<%= helpers.capitalize(name) %>.js"
-    }
-  ]
-}
-```
-
-A file object contains
-
-1. `blueprint-path` - location of the blueprint file
-
-2. `target-path` - location where the file should be generated
-
-3. `parent-path` - optional parameter, used if you want to generate the file inside an already existing folder in your project.
-
-Also, `target-path` supports [ejs](https://github.com/mde/ejs) and the following variables will be passed while rendering,
-
-1. `name` - `<component-name>` input from user
-
-2. `parent` - in particular special cases where you need to generate files inside an already existing folder, you can obtain this parent variable from the user. A config using that will look like,
-    ```
-    {
-      "name": "dumb-m",
-      "description": "Generates a dumb react component in a module directory",
-      "usage": "dumb-m <module-name>/<component-name>",
-      "files": [
-        {
-          "blueprint-path": "config/blueprints/dumb-component.ejs",
-          "parent-path": "client/modules/<%= helpers.capitalize(parent) %>",
-          "target-path": "components/<%= helpers.capitalize(name) %>/<%= helpers.capitalize(name) %>.js"
-        }
-      ]
-    }
-    ```
-    Here, notice the usage. In `<module-name>/<component-name>`, `<module-name>` will be passed as `parent` and `<component-name>` will be passed as `<name>`.
-
-3. `helpers` - an helper object is passed which include common utility functions. For now, it contains `capitalize`. If you want to add more, send a PR to [mern-cli](https://github.com/Hashnode/mern-cli).
-
-#### Blueprint files
-Blueprints are basically [ejs](https://github.com/mde/ejs) templates which are rendered with the same three variables(`name`, optional `parent` and `helpers` object) as above.
-
-### Caveats
-
-#### FOUC (Flash of Unstyled Content)
-To make the hot reloading of CSS work, we are not extracting CSS in development. Ideally, during server rendering, we will be extracting CSS, and we will get a .css file, and we can use it in the html template. That's what we are doing in production.
-
-In development, after all scripts get loaded, react loads the CSS as BLOBs. That's why there is a second of FOUC in development.
-
-#### Client and Server Markup Mismatch
-This warning is visible only on development and totally harmless. This occurs to hash difference in `react-router`. To solve it, react router docs asks you to use `match` function. If we use `match`, `react-hot-reloader` stops working.
-
-## License
-MERN is released under the [MIT License](http://www.opensource.org/licenses/MIT).

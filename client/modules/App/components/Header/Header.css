@@ -2,11 +2,12 @@
   background: #eee url('../../header-bk.png') center;
   background-size: cover;
   border-bottom: 1px solid #ccc;
+  flex: 1 100%;
 }
 
 .content {
   width: 100%;
-  max-width: 980px;
+  max-width: 1140px;
   margin: auto;
   padding: 64px 16px;
   overflow: auto;
@@ -16,6 +17,7 @@
   font-weight: 300;
   font-size: 42px;
   float: left;
+  flex: 1;
 }
 
 .site-title a {
@@ -37,11 +39,17 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-.language-switcher ul {
+.language-switcher-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.language-switcher-container ul {
   list-style: none;
-  width: 980px;
   margin: auto;
   text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .language-switcher li {
@@ -64,5 +72,6 @@
   .add-post-button{
     float: left;
     margin-top: 16px;
+    margin-left: 15px;
   }
 }

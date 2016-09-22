@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 
+// Import Style
+import styles from './PostList.css';
+
 // Import Components
 import PostListItem from './PostListItem/PostListItem';
 
 function PostList(props) {
   return (
-    <div className="listView">
+    <div className={styles['list-view']}>
       {
         props.posts.map(post => (
           <PostListItem

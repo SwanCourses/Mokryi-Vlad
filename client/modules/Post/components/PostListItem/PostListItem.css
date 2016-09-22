@@ -2,6 +2,7 @@
   margin: 20px 0;
   padding: 15px;
   border-radius: 2px;
+  flex: 1 33%;
 }
 
 .post-title{
