@@ -1,11 +1,35 @@
 import callApi, { callApiForm } from '../../util/apiCaller';
 
+export const ADD_PRODUCTS = 'ADD_PRODUCTS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
+export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+
+export function addProducts(products) {
+  return {
+    type: ADD_PRODUCTS,
+    products,
+  };
+}
 
 export function addProduct(product) {
   return {
     type: ADD_PRODUCT,
     product,
+  };
+}
+
+export function setSearchQuery(searchQuery) {
+  return {
+    type: SET_SEARCH_QUERY,
+    searchQuery,
+  };
+}
+
+export function fetchProducts() {
+  return (dispatch) => {
+    return callApi('products').then(res => {
+      dispatch(addProducts(res.products));
+    });
   };
 }
 
