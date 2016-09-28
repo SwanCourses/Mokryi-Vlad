@@ -5,6 +5,9 @@ import {connect} from 'react-redux';
 
 import {addProductRequest}from '../../ProductActions';
 
+// Import Components
+import ProductColorItem from '../../components/ProductColorItem/ProductColorItem';
+
 import  styles from './ProductFormPage.css'
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
@@ -25,7 +28,7 @@ const serialize = (obj, prefix) => {
 class ProductFormPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {colors: {color_1: colors[0]}, colorIndex: 2};
   }
 
   onChange = (e)=> {
@@ -45,16 +48,16 @@ class ProductFormPage extends Component {
 
   onAddColor = (e) => {
     e.preventDefault();
-    let data = JSON.parse(JSON.stringify(this.state.colors || {}));
-    let key = 'color_' + (this.state.colorIndex || 1);
+    let data = this.state.colors;
+    let key = 'color_' + this.state.colorIndex;
     data[key] = colors[0];
-    this.setState({colors: data, colorIndex: (this.state.colorIndex || 1) + 1});
+    this.setState({colors: data, colorIndex: this.state.colorIndex + 1});
   };
 
   onRemoveColor = (e) => {
     e.preventDefault();
     if (e.currentTarget.dataset.color) {
-      let data = JSON.parse(JSON.stringify(this.state.colors || {}));
+      let data = this.state.colors;
       delete data[e.currentTarget.dataset.color];
       this.setState({colors: data});
     }
@@ -66,8 +69,13 @@ class ProductFormPage extends Component {
     form.append('product[code]', this.state.code);
     form.append('product[price]', this.state.price);
     form.append('product[description]', this.state.description);
-    form.append('product[sizes]', this.state.sizes);
-    form.append('product[colors]', serialize(this.state.colors));
+    for (let i = 0, size; size = this.state.sizes[i]; i++) {
+      form.append('product[sizes]', size);
+    }
+    //send object colors
+    Object.keys(this.state.colors).forEach((key) => {
+      form.append('product[colors][' + key + ']', this.state.colors[key]);
+    });
     for (let i = 0, file; file = this.refs.photos.files[i]; i++) {
       form.append('product[photos]', file, file.name);
     }
@@ -94,8 +102,8 @@ class ProductFormPage extends Component {
                  type="number"/>
           {Object.keys(this.state.colors || {}).map((color) => {
             return (
-              <ProductFormColorControl value={this.state.colors[color]} name={color} onColorSelect={this.onColorSelect.bind(this)}
-                                       onRemoveColor={this.onRemoveColor.bind(this)}/>
+              <ProductColorItem key={color} value={this.state.colors[color]} name={color} onColorSelect={this.onColorSelect.bind(this)}
+                                      colors={colors} onRemoveColor={this.onRemoveColor.bind(this)}/>
             )
           })}
           <a className={styles['add-color'] + ' ' + styles['button']} href="#"
@@ -105,7 +113,7 @@ class ProductFormPage extends Component {
           <select multiple="multiple" size="5" className={styles['form-field']} name="sizes"
                   onChange={this.onChangeSelect}>>
             {sizes.map((x) =>
-              <option value={x}>{x}</option>
+              <option key={x} value={x}>{x}</option>
             )}
           </select>
           <textarea placeholder={this.props.intl.messages.productDescription} value={this.state.description}
@@ -121,26 +129,6 @@ class ProductFormPage extends Component {
         </div>
       </div>
     )
-  }
-}
-
-class ProductFormColorControl extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  };
-  render() {
-    return (
-      <div>
-        <select name={this.props.name} value={this.props.value} onChange={this.props.onColorSelect} className={styles['form-field'] + ' ' + styles['select-color']}>
-          {colors.map((y) => { return (
-            <option value={y}>{y}</option>
-            )}
-          )}
-        </select>
-        <a data-color={this.props.name} className={styles['remove-color'] + ' ' + styles['button']} href="#" onClick={this.props.onRemoveColor}><FormattedMessage id="productRemoveColor"/></a>
-      </div>
-    );
   }
 }
 

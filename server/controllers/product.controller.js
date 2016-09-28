@@ -21,14 +21,6 @@ export function addProduct(req, res) {
   if (!req.body.product.name || !req.body.product.code || !req.body.product.price || !req.body.product.description) {
     res.status(403).end();
   } else {
-
-    req.body.product.sizes = req.body.product.sizes.split(',');
-    let colors = {};
-    req.body.product.colors.split('&').forEach((color) => {
-      let prop = color.split('=');
-      colors[decodeURIComponent(prop[0])] = decodeURIComponent(prop[1]);
-    });
-    req.body.product.colors = colors;
     const newProduct = new Product(req.body.product);
 
     // Let's sanitize inputs
