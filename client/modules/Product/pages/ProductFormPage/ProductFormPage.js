@@ -60,6 +60,7 @@ class ProductFormPage extends Component {
     for (let i = 0, size; size = this.state.sizes[i]; i++) {
       form.append('product[sizes]', size);
     }
+    form.append('product[category]', this.state.category);
     //send object colors
     Object.keys(this.state.colors).forEach((key) => {
       form.append('product[colors][' + key + ']', this.state.colors[key]);
@@ -88,6 +89,7 @@ class ProductFormPage extends Component {
           <input placeholder={this.props.intl.messages.productPrice} value={this.state.price} onChange={this.onChange}
                  className={styles['form-field']} name="price"
                  type="number"/>
+
           {Object.keys(this.state.colors || {}).map((color) => {
             return (
               <ProductColorItem key={color} value={this.state.colors[color]} name={color} onColorSelect={this.onColorSelect.bind(this)}
@@ -98,8 +100,17 @@ class ProductFormPage extends Component {
              onClick={this.onAddColor}><FormattedMessage
             id="productAddColor"/></a>
 
+          <select className={styles['form-field']} name="category" value={this.state.category}
+                  onChange={this.onChange}>
+            {this.props.categories.map((category) => {
+              return (
+                <option key={category} value={category}>{category}</option>
+              )
+            })}
+          </select>
+
           <select multiple="multiple" size="5" className={styles['form-field']} name="sizes"
-                  onChange={this.onChangeSelect}>>
+                  onChange={this.onChangeSelect}>
             {sizes.map((x) =>
               <option key={x} value={x}>{x}</option>
             )}
@@ -124,8 +135,10 @@ ProductFormPage.propTypes = {
   intl: intlShape.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {};
+function mapStateToProps(store) {
+  return {
+    categories: store.products.categories
+  };
 }
 
 export default connect(mapStateToProps)(injectIntl(ProductFormPage));

@@ -1,7 +1,8 @@
-import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY } from './ProductActions';
+import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_CATEGORY } from './ProductActions';
 
+const categories = ['cat1', 'cat2', 'cat3'];
 // Initial State
-const initialState = { data: [], searchQuery: '' };
+const initialState = { data: [], searchQuery: '', categories: categories, filterCategory: ''};
 
 const ProductReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -24,6 +25,12 @@ const ProductReducer = (state = initialState, action) => {
         searchQuery: action.searchQuery
       };
 
+    case SET_FILTER_CATEGORY:
+      return {
+        ...state,
+        filterCategory: action.filterCategory
+      };
+
     default:
       return state;
   }
@@ -31,10 +38,17 @@ const ProductReducer = (state = initialState, action) => {
 
 /* Selectors */
 
-// Get all products
-export const getProducts = (state, name = '') => {
+// Get products
+export const getProducts = (state, name = '', category = '') => {
   name = name.trim();
-  return name === '' ? state.products.data : state.products.data.filter(product =>  `${product.name} ${product.price}`.indexOf(name) > -1)
+  let products = state.products.data;
+  if (category) {
+    products = products.filter(product => product.category === category);
+  }
+  if (name) {
+    products = products.filter(product =>  `${product.name} ${product.price}`.indexOf(name) > -1);
+  }
+  return products;
 };
 
 // Get product by cuid

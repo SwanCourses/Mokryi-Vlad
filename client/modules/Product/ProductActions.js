@@ -3,6 +3,7 @@ import callApi, { callApiForm } from '../../util/apiCaller';
 export const ADD_PRODUCTS = 'ADD_PRODUCTS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+export const SET_FILTER_CATEGORY = 'SET_FILTER_CATEGORY';
 
 export function addProducts(products) {
   return {
@@ -22,6 +23,13 @@ export function setSearchQuery(searchQuery) {
   return {
     type: SET_SEARCH_QUERY,
     searchQuery,
+  };
+}
+
+export function setFilterCategory(filterCategory) {
+  return {
+    type: SET_FILTER_CATEGORY,
+    filterCategory,
   };
 }
 
