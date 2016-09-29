@@ -1,8 +1,8 @@
-import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_CATEGORY } from './ProductActions';
+import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_GROUP } from './ProductActions';
 
-const categories = ['cat1', 'cat2', 'cat3'];
+const groups = ['group1', 'group2', 'group3'];
 // Initial State
-const initialState = { data: [], searchQuery: '', categories: categories, filterCategory: ''};
+const initialState = { data: [], searchQuery: '', groups: groups, filterGroup: ''};
 
 const ProductReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -25,10 +25,10 @@ const ProductReducer = (state = initialState, action) => {
         searchQuery: action.searchQuery
       };
 
-    case SET_FILTER_CATEGORY:
+    case SET_FILTER_GROUP:
       return {
         ...state,
-        filterCategory: action.filterCategory
+        filterGroup: action.filterGroup
       };
 
     default:
@@ -39,11 +39,11 @@ const ProductReducer = (state = initialState, action) => {
 /* Selectors */
 
 // Get products
-export const getProducts = (state, name = '', category = '') => {
+export const getProducts = (state, name = '', group = '') => {
   name = name.trim();
   let products = state.products.data;
-  if (category) {
-    products = products.filter(product => product.category === category);
+  if (group) {
+    products = products.filter(product => product.group === group);
   }
   if (name) {
     products = products.filter(product =>  `${product.name} ${product.price}`.indexOf(name) > -1);

@@ -18,12 +18,12 @@
   flex-flow: column wrap;
 }
 
-.container .filter-panel .category-filter {
+.container .filter-panel .group-filter {
   width: 100%;
   padding: 5px;
   margin: 5px 0;
 }
 
-.container .filter-panel .category-filter.active {
+.container .filter-panel .group-filter.active {
   background-color: bisque;
 }

@@ -10,7 +10,7 @@ const productSchema = new Schema({
   photos: [],
   sizes: [],
   colors: {},
-  category: {type: 'String'}
+  group: {type: 'String'}
 });
 
 export default mongoose.model('Product', productSchema);

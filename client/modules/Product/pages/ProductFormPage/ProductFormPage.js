@@ -60,7 +60,7 @@ class ProductFormPage extends Component {
     for (let i = 0, size; size = this.state.sizes[i]; i++) {
       form.append('product[sizes]', size);
     }
-    form.append('product[category]', this.state.category);
+    form.append('product[group]', this.state.group);
     //send object colors
     Object.keys(this.state.colors).forEach((key) => {
       form.append('product[colors][' + key + ']', this.state.colors[key]);
@@ -100,11 +100,11 @@ class ProductFormPage extends Component {
              onClick={this.onAddColor}><FormattedMessage
             id="productAddColor"/></a>
 
-          <select className={styles['form-field']} name="category" value={this.state.category}
+          <select className={styles['form-field']} name="group" value={this.state.group}
                   onChange={this.onChange}>
-            {this.props.categories.map((category) => {
+            {this.props.groups.map((group) => {
               return (
-                <option key={category} value={category}>{category}</option>
+                <option key={group} value={group}>{group}</option>
               )
             })}
           </select>
@@ -137,7 +137,7 @@ ProductFormPage.propTypes = {
 
 function mapStateToProps(store) {
   return {
-    categories: store.products.categories
+    groups: store.products.groups
   };
 }
 
