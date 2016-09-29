@@ -1,6 +1,10 @@
 import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_GROUP } from './ProductActions';
 
-const groups = ['group1', 'group2', 'group3'];
+const GROUP1 = 'group1';
+const GROUP2 = 'group2';
+const GROUP3 = 'group3';
+
+const groups = [GROUP1, GROUP2, GROUP3];
 // Initial State
 const initialState = { data: [], searchQuery: '', groups: groups, filterGroup: ''};
 
@@ -41,14 +45,17 @@ const ProductReducer = (state = initialState, action) => {
 // Get products
 export const getProducts = (state, name = '', group = '') => {
   name = name.trim();
-  let products = state.products.data;
-  if (group) {
-    products = products.filter(product => product.group === group);
-  }
-  if (name) {
-    products = products.filter(product =>  `${product.name} ${product.price}`.indexOf(name) > -1);
-  }
-  return products;
+  return state.products.data.filter((product) => {
+    if (group && name) {
+      return product.group === group && `${product.name} ${product.price}`.indexOf(name) > -1;
+    } else if (group) {
+      return product.group === group;
+    } else if (name) {
+      return `${product.name} ${product.price}`.indexOf(name) > -1;
+    } else {
+      return true;
+    }
+  });
 };
 
 // Get product by cuid
