@@ -46,14 +46,14 @@ const ProductReducer = (state = initialState, action) => {
 export const getProducts = (state, name = '', group = '') => {
   name = name.trim();
   return state.products.data.filter((product) => {
-    if (group && name) {
-      return product.group === group && `${product.name} ${product.price}`.indexOf(name) > -1;
-    } else if (group) {
-      return product.group === group;
-    } else if (name) {
-      return `${product.name} ${product.price}`.indexOf(name) > -1;
+    if (name === '' && group === '' ) {
+      return state.products.data
+    } else if (name === '' ){
+      return state.products.data.filter(product => product.group === group)
+    } else if (group === '' ){
+      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
     } else {
-      return true;
+      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group)
     }
   });
 };
