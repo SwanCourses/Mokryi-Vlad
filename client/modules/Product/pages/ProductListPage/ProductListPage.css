@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+}
+
+.container .products {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.container .products .product {
+  margin-bottom: 20px;
+}
+
+.container .filter-panel {
+  width: 300px;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.container .filter-panel .group-filter {
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0;
+}
+
+.container .filter-panel .group-filter.active {
+  background-color: bisque;
+}
