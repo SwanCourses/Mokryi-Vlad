@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import ProductListItem from '../../components/ProductListItem/ProductListItem';
 import ProductGroupFilterItem from '../../components/ProductGroupFilterItem/ProductGroupFilterItem';
 
+
+import { Link } from 'react-router';
 import styles from './ProductListPage.css';
 
 // Import Selectors
@@ -27,6 +29,7 @@ class ProductListPage extends Component {
     return (
       <div className={styles.container}>
         <div className={styles['filter-panel']}>
+          <Link to="/products/new">New product</Link>
           <input type="search" value={this.props.searchQuery} placeholder="Type name..."
                  onChange={e=>this.props.dispatch(setSearchQuery(e.target.value))}/>
           <div>

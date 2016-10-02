@@ -45,17 +45,15 @@ const ProductReducer = (state = initialState, action) => {
 // Get products
 export const getProducts = (state, name = '', group = '') => {
   name = name.trim();
-  return state.products.data.filter((product) => {
-    if (name === '' && group === '' ) {
-      return state.products.data
-    } else if (name === '' ){
-      return state.products.data.filter(product => product.group === group)
-    } else if (group === '' ){
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
-    } else {
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group)
-    }
-  });
+  if (name === '' && group === '') {
+    return state.products.data
+  } else if (name === '') {
+    return state.products.data.filter(product => product.group === group)
+  } else if (group === '') {
+    return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
+  } else {
+    return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group)
+  }
 };
 
 // Get product by cuid
