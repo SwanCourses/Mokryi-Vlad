@@ -5,8 +5,15 @@ const GROUP2 = 'group2';
 const GROUP3 = 'group3';
 
 const groups = [GROUP1, GROUP2, GROUP3];
+
+const COLOR_WHITE = 'white';
+const COLOR_RED = 'red';
+const COLOR_BLUE = 'blue';
+const COLOR_GREEN = 'green';
+const COLOR_BLACK = 'black';
+const colors = [COLOR_WHITE, COLOR_RED, COLOR_BLUE, COLOR_GREEN, COLOR_BLACK];
 // Initial State
-const initialState = { data: [], searchQuery: '', groups: groups, filterGroup: ''};
+const initialState = { data: [], searchQuery: '', groups: groups, colors: colors, filterGroup: ''};
 
 const ProductReducer = (state = initialState, action) => {
   switch (action.type) {

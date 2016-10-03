@@ -63,3 +63,9 @@ textarea {
   width: 50%;
 }
 
+.colors-container {
+  padding: 1em;
+  border: 1px solid #ddd;
+  margin-bottom: 1em;
+}
+
