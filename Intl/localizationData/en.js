@@ -36,5 +36,6 @@ export default {
     	  =1 {has # comment}
     	  other {has # comments}
     	} as of {date}`,
+    categoriesBarHeader: 'Name'
   },
 };

@@ -35,6 +35,7 @@ import { fetchComponentData } from './util/fetchData';
 import posts from './routes/post.routes';
 import dummyData from './dummyData';
 import products from './routes/product.routes';
+import categories from './routes/category.routes'
 import serverConfig from './config';
 
 import { createDir } from  './util/fs-helpers';
@@ -64,6 +65,7 @@ app.use(Express.static(path.resolve(__dirname, '../dist')));
 app.use('/uploads', Express.static(path.resolve(__dirname, '../uploads') ));
 app.use('/api', posts);
 app.use('/api', products);
+app.use('/api', categories);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
