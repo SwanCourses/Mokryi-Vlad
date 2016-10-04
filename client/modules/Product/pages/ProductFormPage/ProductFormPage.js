@@ -11,12 +11,11 @@ import ProductColorItem from '../../components/ProductColorItem/ProductColorItem
 import  styles from './ProductFormPage.css'
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-const colors = ['white', 'red', 'blue', 'green', 'black'];
 
 class ProductFormPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {colors: {color_1: colors[0]}, colorIndex: 2};
+    this.state = {colors: {color_1: { value: this.props.colors[0], photos: []}}, colorIndex: 2, group: this.props.groups[0]};
   }
 
   onChange = (e)=> {
@@ -38,17 +37,22 @@ class ProductFormPage extends Component {
     e.preventDefault();
     let data = this.state.colors;
     let key = 'color_' + this.state.colorIndex;
-    data[key] = colors[0];
+    data[key] = { value: this.props.colors[0], photos: [] };
     this.setState({colors: data, colorIndex: this.state.colorIndex + 1});
   };
 
-  onRemoveColor = (e) => {
+  onRemoveColor = (color, e) => {
     e.preventDefault();
-    if (e.currentTarget.dataset.color) {
-      let data = this.state.colors;
-      delete data[e.currentTarget.dataset.color];
-      this.setState({colors: data});
-    }
+    let data = this.state.colors;
+    delete data[color];
+    this.setState({colors: data});
+  };
+
+  onFileLoad = (color, e) => {
+    e.preventDefault();
+    let data = this.state.colors;
+    data[color].photos = e.target.files;
+    this.setState({colors: data});
   };
 
   addProduct = ()=> {
@@ -63,17 +67,17 @@ class ProductFormPage extends Component {
     form.append('product[group]', this.state.group);
     //send object colors
     Object.keys(this.state.colors).forEach((key) => {
-      form.append('product[colors][' + key + ']', this.state.colors[key]);
+      form.append('product[colors][' + key + '][value]', this.state.colors[key].value);
+      for (let i = 0, file; file = this.state.colors[key].photos[i]; i++) {
+        form.append('product[colors][' + key + '][photos]', file, file.name);
+      }
     });
-    for (let i = 0, file; file = this.refs.photos.files[i]; i++) {
-      form.append('product[photos]', file, file.name);
-    }
     this.props.dispatch(addProductRequest(form))
   };
 
   onColorSelect = (e) => {
     let data = JSON.parse(JSON.stringify(this.state.colors || {}));
-    data[e.target.name] = e.target.value;
+    data[e.target.name].value = e.target.value;
     this.setState({colors: data});
   };
 
@@ -92,8 +96,9 @@ class ProductFormPage extends Component {
 
           {Object.keys(this.state.colors || {}).map((color) => {
             return (
-              <ProductColorItem key={color} value={this.state.colors[color]} name={color} onColorSelect={this.onColorSelect.bind(this)}
-                                      colors={colors} onRemoveColor={this.onRemoveColor.bind(this)}/>
+              <ProductColorItem key={color} value={this.state.colors[color].value} photos={this.state.colors[color].photos} name={color} onColorSelect={this.onColorSelect.bind(this)}
+                                onFileLoad={this.onFileLoad.bind(this, color)} colors={this.props.colors} onRemoveColor={this.onRemoveColor.bind(this, color)}
+              />
             )
           })}
           <a className={styles['add-color'] + ' ' + styles['button']} href="#"
@@ -119,10 +124,6 @@ class ProductFormPage extends Component {
                     onChange={this.onChange}
                     className={styles['form-field']}
                     name="description"/>
-          <div className={styles.photos}>
-            <input className={styles['form-field']} ref="photos" multiple="multiple" type="file"
-                   onChange={this.onFileLoad}/>
-          </div>
           <a className={styles['post-submit'] + ' ' + styles['button']} href="#"
              onClick={this.addProduct}><FormattedMessage id="submit"/></a>
         </div>
@@ -137,7 +138,8 @@ ProductFormPage.propTypes = {
 
 function mapStateToProps(store) {
   return {
-    groups: store.products.groups
+    groups: store.products.groups,
+    colors: store.products.colors
   };
 }
 

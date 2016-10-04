@@ -31,7 +31,12 @@ export function addProduct(req, res) {
 
     newProduct.cuid = cuid();
     for (let i = 0, file; file = req.files[i]; i++) {
-      newProduct.photos.push({ fileName: file.filename })
+      //parse fieldname
+      var key = file.fieldname.split('[')[2].slice(0,-1);
+      if (!newProduct.colors[key].photos) {
+        newProduct.colors[key].photos = [];
+      }
+      newProduct.colors[key].photos.push({ fileName: file.filename })
     }
 
     newProduct.save().then((saved)=> {

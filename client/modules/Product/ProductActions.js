@@ -4,6 +4,7 @@ export const ADD_PRODUCTS = 'ADD_PRODUCTS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 export const SET_FILTER_GROUP = 'SET_FILTER_GROUP';
+import { browserHistory } from 'react-router';
 
 export function addProducts(products) {
   return {
@@ -43,6 +44,9 @@ export function fetchProducts() {
 
 export function addProductRequest(form) {
   return (dispatch) => {
-    return callApiForm('products', 'post', form).then(res => dispatch(addProduct(res.product)));
+    return callApiForm('products', 'post', form).then(res => {
+      dispatch(addProduct(res.product));
+      browserHistory.push('/products/'+res.product.cuid)
+    });
   };
 }
