@@ -4,7 +4,7 @@ import ProductListItem from '../../components/ProductListItem/ProductListItem';
 import ProductGroupFilterItem from '../../components/ProductGroupFilterItem/ProductGroupFilterItem';
 
 
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import styles from './ProductListPage.css';
 
 // Import Selectors
@@ -27,31 +27,33 @@ class ProductListPage extends Component {
 
   render() {
     return (
-      <div className={styles.container}>
-        <div className={styles['filter-panel']}>
-          <Link to="/products/new">New product</Link>
-          <input type="search" value={this.props.searchQuery} placeholder="Type name..."
-                 onChange={e=>this.props.dispatch(setSearchQuery(e.target.value))}/>
-          <div>
-            <button className={styles['group-filter']} onClick={this.onSelectGroupFilter} data-group="">All</button>
-          </div>
+      <div>
+        <div className={styles['groups-bar']}>
+          <button className={styles['group-filter']} onClick={this.onSelectGroupFilter} data-group="">All</button>
           {
             this.props.groups.map(group=> (
               <ProductGroupFilterItem key={group} name={group} onClick={this.onSelectGroupFilter.bind(this)}/>
             ))
           }
         </div>
+        <div className={styles.container}>
+          <div className={styles['filter-panel']}>
+            <Link className={styles['new-product']} to="/products/new">New product</Link>
+            <input type="search" value={this.props.searchQuery} placeholder="Type name..."
+                   onChange={e=>this.props.dispatch(setSearchQuery(e.target.value))}/>
+          </div>
 
-        <div className={styles.products}>
-          {
-            this.props.products.map(product=> (
-              <div key={product.cuid} className={styles.product}>
-                <ProductListItem key={product.cuid} {...product}/>
-              </div>
-            ))
-          }
+          <div className={styles.products}>
+            {
+              this.props.products.map(product=> (
+                <div key={product.cuid} className={styles.product}>
+                  <ProductListItem key={product.cuid} {...product}/>
+                </div>
+              ))
+            }
+          </div>
+
         </div>
-
       </div>
     )
   }

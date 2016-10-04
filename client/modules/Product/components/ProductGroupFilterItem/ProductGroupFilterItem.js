@@ -4,9 +4,7 @@ import styles from '../../pages/ProductListPage/ProductListPage.css'
 
 function ProductGroupItem (props) {
   return (
-    <div>
       <button className={styles['group-filter']} onClick={props.onClick} data-group={props.name}>{props.name}</button>
-    </div>
   );
 }
 

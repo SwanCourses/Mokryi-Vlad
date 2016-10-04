@@ -13,7 +13,7 @@ const COLOR_GREEN = 'green';
 const COLOR_BLACK = 'black';
 const colors = [COLOR_WHITE, COLOR_RED, COLOR_BLUE, COLOR_GREEN, COLOR_BLACK];
 // Initial State
-const initialState = { data: [], searchQuery: '', groups: groups, colors: colors, filterGroup: ''};
+const initialState = { data: [], searchQuery: '', groups, colors, filterGroup: ''};
 
 const ProductReducer = (state = initialState, action) => {
   switch (action.type) {

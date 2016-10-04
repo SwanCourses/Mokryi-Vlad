@@ -12,18 +12,27 @@
   margin-bottom: 20px;
 }
 
+.groups-bar {
+  display: flex;
+}
+
 .container .filter-panel {
   width: 300px;
+  padding: 10px;
   display: flex;
   flex-flow: column wrap;
 }
 
-.container .filter-panel .group-filter {
-  width: 100%;
+.groups-bar .group-filter {
   padding: 5px;
-  margin: 5px 0;
+  margin: 0 5px 1em;
+  flex: 1;
 }
 
-.container .filter-panel .group-filter.active {
+.container .groups-bar .group-filter.active {
   background-color: bisque;
+}
+
+.new-product {
+  padding: 10px;
 }
