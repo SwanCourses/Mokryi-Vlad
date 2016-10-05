@@ -4,6 +4,8 @@ export const ADD_PRODUCTS = 'ADD_PRODUCTS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 export const SET_FILTER_GROUP = 'SET_FILTER_GROUP';
+export const SET_FILTER_CATEGORY = 'SET_FILTER_CATEGORY';
+export const RESET_FILTERS = 'RESET_FILTERS';
 import { browserHistory } from 'react-router';
 
 export function addProducts(products) {
@@ -31,6 +33,19 @@ export function setFilterGroup(filterGroup) {
   return {
     type: SET_FILTER_GROUP,
     filterGroup,
+  };
+}
+
+export function setFilterCategory(filterCategory) {
+  return {
+    type: SET_FILTER_CATEGORY,
+    filterCategory,
+  };
+}
+
+export function resetFilters() {
+  return {
+    type: RESET_FILTERS
   };
 }
 

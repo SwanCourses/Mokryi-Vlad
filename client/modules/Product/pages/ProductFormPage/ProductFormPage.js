@@ -4,6 +4,7 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import {connect} from 'react-redux';
 
 import {addProductRequest}from '../../ProductActions';
+import { getCategories } from '../../../Category/CategoryReducer';
 
 // Import Components
 import ProductColorItem from '../../components/ProductColorItem/ProductColorItem';
@@ -15,7 +16,7 @@ const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 class ProductFormPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {colors: {color_1: { value: this.props.colors[0], photos: []}}, colorIndex: 2, group: this.props.groups[0]};
+    this.state = {colors: {color_1: { value: this.props.colors[0], photos: []}}, colorIndex: 2, description: ''};
   }
 
   onChange = (e)=> {
@@ -72,6 +73,7 @@ class ProductFormPage extends Component {
         form.append('product[colors][' + key + '][photos]', file, file.name);
       }
     });
+    form.append('product[category]', this.state.category);
     this.props.dispatch(addProductRequest(form))
   };
 
@@ -107,9 +109,19 @@ class ProductFormPage extends Component {
 
           <select className={styles['form-field']} name="group" value={this.state.group}
                   onChange={this.onChange}>
+            <option selected disabled hidden>Choose group</option>
             {this.props.groups.map((group) => {
               return (
                 <option key={group} value={group}>{group}</option>
+              )
+            })}
+          </select>
+
+          <select className={styles['form-field']} name="category" value={this.state.category} onChange={this.onChange}>
+            <option selected disabled hidden>Choose category</option>
+            {this.props.categories.map((category) => {
+              return (
+                <option key={category.cuid} value={category.cuid}>{category.name}</option>
               )
             })}
           </select>
@@ -132,6 +144,12 @@ class ProductFormPage extends Component {
   }
 }
 
+ProductFormPage.defaultProps = {
+  groups: [],
+  colors: [],
+  categories: [],
+};
+
 ProductFormPage.propTypes = {
   intl: intlShape.isRequired,
 };
@@ -139,7 +157,8 @@ ProductFormPage.propTypes = {
 function mapStateToProps(store) {
   return {
     groups: store.products.groups,
-    colors: store.products.colors
+    colors: store.products.colors,
+    categories: getCategories(store),
   };
 }
 

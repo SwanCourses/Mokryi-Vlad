@@ -26,6 +26,16 @@ const CategoryReducer = (state = initialState, action) => {
 // Get all products
 export const getCategories = state => state.categories.data;
 
+export const getCategoriesByProducts = (state, products) => {
+  let categories = [];
+  products.forEach(function (product) {
+    if (categories.indexOf(product.category) === -1) {
+      categories.push(product.category);
+    }
+  });
+  return state.categories.data.filter(category => categories.indexOf(category.cuid) !== -1);
+};
+
 // Get product by cuid
 export const getCategory = (state, cuid) => state.categories.data.filter(category => category.cuid === cuid)[0];
 

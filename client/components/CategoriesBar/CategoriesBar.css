@@ -23,3 +23,7 @@
 .header {
   border-bottom: 1px solid #7f7f7f;
 }
+
+.reset-btn {
+  float: right;
+}

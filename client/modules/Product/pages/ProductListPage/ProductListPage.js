@@ -9,8 +9,8 @@ import styles from './ProductListPage.css';
 
 // Import Selectors
 import {getProducts} from '../../ProductReducer';
-import { getCategories } from '../../../Category/CategoryReducer';
-import {setSearchQuery, setFilterGroup} from '../../ProductActions';
+import { getCategoriesByProducts } from '../../../Category/CategoryReducer';
+import {setSearchQuery, setFilterGroup, setFilterCategory, resetFilters} from '../../ProductActions';
 
 import CategoriesBar from '../../../../components/CategoriesBar/CategoriesBar';
 
@@ -28,6 +28,14 @@ class ProductListPage extends Component {
     this.props.dispatch(setFilterGroup(e.currentTarget.dataset.group));
   };
 
+  onSelectCategoryFilter = (cuid) => {
+    this.props.dispatch(setFilterCategory(cuid));
+  };
+
+  resetAllFilters = () => {
+    this.props.dispatch(resetFilters());
+  };
+
   render() {
     return (
       <div>
@@ -42,9 +50,10 @@ class ProductListPage extends Component {
         <div className={styles.container}>
           <div className={styles['filter-panel']}>
             <Link className={styles['new-product']} to="/products/new">New product</Link>
+            <a className={styles['new-product']} href="#" onClick={this.resetAllFilters}>Clear All Filters</a>
             <input type="search" value={this.props.searchQuery} placeholder="Type name..."
                    onChange={e=>this.props.dispatch(setSearchQuery(e.target.value))}/>
-            <CategoriesBar {...this.props} onSelect={cuid=>alert(cuid)}/>
+            <CategoriesBar {...this.props} onSelect={cuid=>this.onSelectCategoryFilter(cuid)}/>
           </div>
 
           <div className={styles.products}>
@@ -65,11 +74,13 @@ class ProductListPage extends Component {
 
 // Retrieve data from store as props
 function mapStateToProps(state) {
+  let products = getProducts(state, state.products.searchQuery, state.products.filterGroup, state.products.filterCategory);
   return {
-    categories: getCategories(state),
+    categories: getCategoriesByProducts(state, products),
     searchQuery: state.products.searchQuery,
     filterGroup: state.products.filterGroup,
-    products: getProducts(state, state.products.searchQuery, state.products.filterGroup),
+    filterCategory: state.products.filterCategory,
+    products: products,
     groups: state.products.groups
   };
 }
