@@ -18,6 +18,9 @@ export function Header(props, context) {
             <li>
               <Link to="/products">Products</Link>
             </li>
+            <li>
+              <Link to="/categories/new">New category</Link>
+            </li>
             <li><FormattedMessage id="switchLanguage" /></li>
             {languageNodes}
           </ul>

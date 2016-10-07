@@ -8,7 +8,7 @@ import styles from './ProductListItem.css';
 function ProductListItem(props) {
   let getPhoto = () => {
     var fileName = '';
-    Object.keys(props.colors || {}).forEach((key) => {
+    Object.keys(props.colors).forEach((key) => {
         if (props.colors[key].photos && props.colors[key].photos.length && props.colors[key].photos[0].fileName) {
           fileName = props.colors[key].photos[0].fileName;
         }
@@ -26,5 +26,9 @@ function ProductListItem(props) {
 }
 
 ProductListItem.propTypes = {};
+
+ProductListItem.defaultProps = {
+  colors:{}
+};
 
 export default ProductListItem;
