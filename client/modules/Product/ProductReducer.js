@@ -1,4 +1,4 @@
-import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_GROUP, SET_FILTER_CATEGORY, RESET_FILTERS } from './ProductActions';
+import { ADD_PRODUCT, ADD_PRODUCTS, SET_SEARCH_QUERY, SET_FILTER_GROUP, SET_FILTER_CATEGORY, RESET_FILTERS, REPLACE_PRODUCT } from './ProductActions';
 
 const GROUP1 = 'group1';
 const GROUP2 = 'group2';
@@ -56,6 +56,12 @@ const ProductReducer = (state = initialState, action) => {
         filterGroup: ''
       };
 
+    case REPLACE_PRODUCT:
+      return {
+        ...state,
+        data: state.data.map(obj => action.product.cuid === obj.cuid ? action.product : obj)
+      };
+
     default:
       return state;
   }
@@ -66,45 +72,46 @@ const ProductReducer = (state = initialState, action) => {
 // Get products
 export const getProducts = (state, name = '', group = '', category = '') => {
   name = name.trim();
+  var data = state.products.data.filter(product => !product.inactive);
   if (name === '' && group === '' && category === '') {
     //all
-    return state.products.data
+    return data;
   } else if (name === '') {
     if (group === '') {
       //only category
-      return state.products.data.filter(product => product.category === category);
+      return data.filter(product => product.category === category);
     } else if (category === ''){
       //only group
-      return state.products.data.filter(product => product.group === group);
+      return data.filter(product => product.group === group);
     } else {
       //group + category
-      return state.products.data.filter(product => product.group === group && product.category === category);
+      return data.filter(product => product.group === group && product.category === category);
     }
   } else if (group === '') {
     if (name === '') {
       //only category
-      return state.products.data.filter(product => product.category === category);
+      return data.filter(product => product.category === category);
     } else if (category === ''){
       //only name
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
+      return data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
     } else {
       //name + category
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.category === category)
+      return data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.category === category)
     }
   } else if (category === '') {
     if (name === '') {
       //only group
-      return state.products.data.filter(product => product.group === group);
+      return data.filter(product => product.group === group);
     } else if (category === ''){
       //only name
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
+      return data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1)
     } else {
       //name + group
-      return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group)
+      return data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group)
     }
   } else {
     //name + group + category
-    return state.products.data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group && product.category === category)
+    return data.filter(product => `${product.name} ${product.price}`.indexOf(name) > -1 && product.group === group && product.category === category)
   }
 };
 

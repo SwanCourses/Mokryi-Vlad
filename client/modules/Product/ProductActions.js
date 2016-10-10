@@ -6,6 +6,7 @@ export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 export const SET_FILTER_GROUP = 'SET_FILTER_GROUP';
 export const SET_FILTER_CATEGORY = 'SET_FILTER_CATEGORY';
 export const RESET_FILTERS = 'RESET_FILTERS';
+export const REPLACE_PRODUCT = 'REPLACE_PRODUCT';
 import { browserHistory } from 'react-router';
 
 export function addProducts(products) {
@@ -61,6 +62,23 @@ export function addProductRequest(form) {
   return (dispatch) => {
     return callApiForm('products', 'post', form).then(res => {
       dispatch(addProduct(res.product));
+      browserHistory.push('/products/'+res.product.cuid)
+    });
+  };
+}
+
+export function replaceProduct(product) {
+  return {
+    type: REPLACE_PRODUCT,
+    product,
+  };
+}
+
+
+export function updateProductRequest(cuid, form) {
+  return (dispatch) => {
+    return callApiForm('products/' + cuid, 'put', form).then(res => {
+      dispatch(replaceProduct(res.product));
       browserHistory.push('/products/'+res.product.cuid)
     });
   };

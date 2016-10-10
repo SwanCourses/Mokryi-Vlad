@@ -11,6 +11,7 @@ const productSchema = new Schema({
   colors: {},
   group: {type: 'String'},
   category: {type: 'String'},
+  inactive: {type: 'Boolean', default: false}
 });
 
 export default mongoose.model('Product', productSchema);

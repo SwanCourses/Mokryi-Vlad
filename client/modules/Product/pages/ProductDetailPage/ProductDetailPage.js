@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import styles from './ProductDetailPage.css';
 
+import { Link } from 'react-router';
 // Import Selectors
 import { getProduct } from '../../ProductReducer';
 
@@ -48,6 +49,7 @@ export class ProductDetailPage extends Component {
                 );
               })}
             </select>
+            <Link to={`/products/${this.props.product.cuid}/edit`}><FormattedMessage id="edit"/></Link>
           </div>
         </div>
       </div>
