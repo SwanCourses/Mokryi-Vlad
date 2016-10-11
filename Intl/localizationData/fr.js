@@ -38,5 +38,6 @@ export default {
   		} as of {date} (in real app this would be translated to French)`,
     categoriesBarHeader: 'Nom',
     categoriesBarReset: 'Reset',
+    edit: 'Modifier',
   },
 };

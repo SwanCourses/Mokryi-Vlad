@@ -28,5 +28,6 @@ var upload = multer({ storage: storage });
 
 router.route('/products').get(ProductController.getProducts);
 router.post('/products', upload.any(), ProductController.addProduct);
+router.put('/products/:cuid', upload.any(), ProductController.updateProduct);
 
 export default router;

@@ -3,12 +3,12 @@ import React, {Component} from 'react'
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import {connect} from 'react-redux';
 
-import {addProductRequest}from '../../ProductActions';
-import { getCategories } from '../../../Category/CategoryReducer';
+import {addProductRequest, updateProductRequest}from '../../ProductActions';
+import {getCategories} from '../../../Category/CategoryReducer';
 
 // Import Components
 import ProductColorItem from '../../components/ProductColorItem/ProductColorItem';
-
+import {getProduct} from '../../ProductReducer';
 import  styles from './ProductFormPage.css'
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
@@ -16,7 +16,26 @@ const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 class ProductFormPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {colors: {color_1: { value: this.props.colors[0], photos: []}}, colorIndex: 2, description: ''};
+    if (props.product) {
+      this.state = props.product;
+      let max = 1;
+      Object.keys(props.product.colors).forEach(function (color) {
+        if (color) {
+          color = parseInt(color.split('_')[1]);
+          if (color > max) {
+            max = color;
+          }
+        }
+      });
+      this.state.colorIndex = max + 1;
+    } else {
+      this.state = {
+        colors: {color_1: {value: this.props.colors[0], photos: []}},
+        colorIndex: 2,
+        description: '',
+        inactive: false
+      };
+    }
   }
 
   onChange = (e)=> {
@@ -38,7 +57,7 @@ class ProductFormPage extends Component {
     e.preventDefault();
     let data = this.state.colors;
     let key = 'color_' + this.state.colorIndex;
-    data[key] = { value: this.props.colors[0], photos: [] };
+    data[key] = {value: this.props.colors[0], photos: []};
     this.setState({colors: data, colorIndex: this.state.colorIndex + 1});
   };
 
@@ -57,6 +76,7 @@ class ProductFormPage extends Component {
   };
 
   addProduct = ()=> {
+    console.log(this.state);
     let form = new FormData();
     form.append('product[name]', this.state.name);
     form.append('product[code]', this.state.code);
@@ -69,18 +89,31 @@ class ProductFormPage extends Component {
     //send object colors
     Object.keys(this.state.colors).forEach((key) => {
       form.append('product[colors][' + key + '][value]', this.state.colors[key].value);
-      for (let i = 0, file; file = this.state.colors[key].photos[i]; i++) {
-        form.append('product[colors][' + key + '][photos]', file, file.name);
+      if (!Array.isArray(this.state.colors[key].photos)) {
+        //send only new files
+        for (let i = 0, file; file = this.state.colors[key].photos[i]; i++) {
+          console.log(file, file.name);
+          form.append('product[colors][' + key + '][photos]', file, file.name);
+        }
       }
     });
     form.append('product[category]', this.state.category);
-    this.props.dispatch(addProductRequest(form))
+    form.append('product[inactive]', this.state.inactive);
+    this.props.dispatch(!this.props.product ? addProductRequest(form) : updateProductRequest(this.props.product.cuid, form));
   };
 
   onColorSelect = (e) => {
     let data = JSON.parse(JSON.stringify(this.state.colors || {}));
     data[e.target.name].value = e.target.value;
     this.setState({colors: data});
+  };
+
+  isEdit = ()=> {
+    return !!this.props.product
+  };
+
+  onChangeActive = (e) => {
+    this.setState({[e.target.name]: e.target.checked});
   };
 
   render() {
@@ -91,15 +124,19 @@ class ProductFormPage extends Component {
           <input placeholder={this.props.intl.messages.productName} value={this.state.name} onChange={this.onChange}
                  className={styles['form-field']} name="name"/>
           <input placeholder={this.props.intl.messages.productCode} value={this.state.code} onChange={this.onChange}
-                 className={styles['form-field']} name="code"/>
+                 className={styles['form-field']} name="code" disabled={this.isEdit()}/>
           <input placeholder={this.props.intl.messages.productPrice} value={this.state.price} onChange={this.onChange}
                  className={styles['form-field']} name="price"
                  type="number"/>
 
           {Object.keys(this.state.colors || {}).map((color) => {
             return (
-              <ProductColorItem key={color} value={this.state.colors[color].value} photos={this.state.colors[color].photos} name={color} onColorSelect={this.onColorSelect.bind(this)}
-                                onFileLoad={this.onFileLoad.bind(this, color)} colors={this.props.colors} onRemoveColor={this.onRemoveColor.bind(this, color)}
+              <ProductColorItem key={color} value={this.state.colors[color].value}
+                                photos={this.state.colors[color].photos} name={color}
+                                onColorSelect={this.onColorSelect.bind(this)}
+                                onFileLoad={this.onFileLoad.bind(this, color)} colors={this.props.colors}
+                                onRemoveColor={this.onRemoveColor.bind(this, color)}
+                                code={this.state.code}
               />
             )
           })}
@@ -136,8 +173,12 @@ class ProductFormPage extends Component {
                     onChange={this.onChange}
                     className={styles['form-field']}
                     name="description"/>
+          <div>
+            <label>Inactive</label>
+            <input name="inactive" type="checkbox" checked={this.state.inactive} onChange={this.onChangeActive}/>
+          </div>
           <a className={styles['post-submit'] + ' ' + styles['button']} href="#"
-             onClick={this.addProduct}><FormattedMessage id="submit"/></a>
+             onClick={this.addProduct}><FormattedMessage id={this.isEdit() ? 'edit' : 'submit'}/></a>
         </div>
       </div>
     )
@@ -154,11 +195,12 @@ ProductFormPage.propTypes = {
   intl: intlShape.isRequired,
 };
 
-function mapStateToProps(store) {
+function mapStateToProps(store, props) {
   return {
     groups: store.products.groups,
     colors: store.products.colors,
     categories: getCategories(store),
+    product: getProduct(store, props.params.cuid),
   };
 }
 

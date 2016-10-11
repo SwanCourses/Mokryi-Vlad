@@ -38,5 +38,6 @@ export default {
     	} as of {date}`,
     categoriesBarHeader: 'Name',
     categoriesBarReset: 'Reset',
+    edit: 'Edit',
   },
 };
