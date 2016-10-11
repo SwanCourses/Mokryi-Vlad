@@ -5,8 +5,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import styles from '../../pages/ProductFormPage/ProductFormPage.css';
 
 function ProductColorItem (props) {
-  let photos;
-  Array.isArray(props.photos) ? photos = props.photos : photos = [];
+  let photos = Array.isArray(props.photos) ? props.photos : [];
     return (
       <div className={styles['colors-container']}>
         <select name={props.name} value={props.value} onChange={props.onColorSelect} className={styles['form-field'] + ' ' + styles['select-color']}>
