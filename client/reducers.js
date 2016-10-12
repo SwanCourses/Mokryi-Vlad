@@ -9,6 +9,7 @@ import posts from './modules/Post/PostReducer';
 import intl from './modules/Intl/IntlReducer';
 import products from './modules/Product/ProductReducer';
 import categories from './modules/Category/CategoryReducer';
+import cart from './modules/Cart/CartReducer';
 
 // Combine all reducers into one root reducer
 export default combineReducers({
@@ -17,4 +18,5 @@ export default combineReducers({
   products,
   intl,
   categories,
+  cart,
 });

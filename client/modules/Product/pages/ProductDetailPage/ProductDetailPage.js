@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import styles from './ProductDetailPage.css';
 
+import { addToCart } from '../../../Cart/CartActions'
+
 import { Link } from 'react-router';
 // Import Selectors
 import { getProduct } from '../../ProductReducer';
@@ -18,8 +20,16 @@ export class ProductDetailPage extends Component {
     return this.props.product.price * 0.95
   };
 
+  addProductToCart = () => {
+    this.props.dispatch(addToCart(this.props.product.cuid, this.state.color, this.state.size));
+  };
+
   onChange = (e) => {
-    this.setState({photos: this.props.product.colors[e.target.value].photos});
+    this.setState({photos: this.props.product.colors[e.target.value].photos, color: e.target.value});
+  };
+
+  onChangeSize = (e) => {
+    this.setState({size: e.target.value});
   };
 
   render() {
@@ -41,7 +51,7 @@ export class ProductDetailPage extends Component {
             <div className={styles.price}>{this.props.product.price + ' грн'}</div>
             <div className={styles.price}>{this.salesPrice() + ' грн'}</div>
             <div className={styles.description}>{this.props.product.description}</div>
-            <select onChange={this.onChange} name="currentColor">
+            <select onChange={this.onChange} name="currentColor" value={this.state.color}>
               <option selected disabled hidden>Choose color</option>
             {Object.keys(this.props.product.colors).map((key) => {
                 return (
@@ -49,6 +59,17 @@ export class ProductDetailPage extends Component {
                 );
               })}
             </select>
+            <select onChange={this.onChangeSize} name="currentSize" value={this.state.size}>
+              <option selected disabled hidden>Choose size</option>
+              {this.props.product.sizes.map((key) => {
+                return (
+                  <option key={key} value={key}>{key}</option>
+                );
+              })}
+            </select>
+            <div onClick={this.state.color && this.state.size && this.addProductToCart}>
+              <FormattedMessage id="order"/>
+            </div>
             <Link to={`/products/${this.props.product.cuid}/edit`}><FormattedMessage id="edit"/></Link>
           </div>
         </div>
