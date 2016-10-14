@@ -39,5 +39,7 @@ export default {
     categoriesBarHeader: 'Nom',
     categoriesBarReset: 'Reset',
     edit: 'Modifier',
+    cart: 'Panier',
+    order: 'Ordre',
   },
 };
