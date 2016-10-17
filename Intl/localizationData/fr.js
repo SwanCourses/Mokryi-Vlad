@@ -41,5 +41,9 @@ export default {
     edit: 'Modifier',
     cart: 'Panier',
     order: 'Ordre',
+    loginForm: 'Autorisation',
+    registrationForm: 'Enregistrement',
+    userLogin: 'Adresse électronique',
+    userPassword: 'Mot de passe',
   },
 };

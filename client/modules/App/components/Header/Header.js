@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 import CartWidget from '../../../Cart/components/CartWidget/CartWidget';
+import ProfileWidget from '../../../User/components/ProfileWidget/ProfileWidget';
 import { ModalContainer, ModalDialog } from 'react-modal-dialog';
+import { isLoggedIn } from '../../../../util/apiCaller';
 
 // Import Style
 import styles from './Header.css';
@@ -10,10 +12,12 @@ import styles from './Header.css';
 export class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { isShowingModal: false }
+    this.state = { isShowingModal: false, modal: '' }
   }
 
-  handleClick = () => this.setState({ isShowingModal: true });
+  handleClick = (modal) => {
+    this.setState({ isShowingModal: true, modal: modal });
+  };
 
   handleClose = () => this.setState({ isShowingModal: false });
 
@@ -28,7 +32,7 @@ export class Header extends Component {
         <div className={styles['language-switcher-container']}>
           <ul>
             <li>
-              <span onClick={this.handleClick}><FormattedMessage id="cart"/> {this.props.cartProductsCount}</span>
+              <span onClick={this.handleClick.bind(this, 'cart')}><FormattedMessage id="cart"/> {this.props.cartProductsCount}</span>
             </li>
             <li>
               <Link to="/products">Products</Link>
@@ -38,6 +42,11 @@ export class Header extends Component {
             </li>
             <li><FormattedMessage id="switchLanguage" /></li>
             {languageNodes}
+            { isLoggedIn() &&
+              <li>
+                <span onClick={this.handleClick.bind(this, 'user')}>Profile</span>
+              </li>
+            }
           </ul>
         </div>
       </div>
@@ -52,10 +61,18 @@ export class Header extends Component {
         }
       </div>
       {
-        this.state.isShowingModal &&
+        this.state.modal === "cart" && this.state.isShowingModal &&
         <ModalContainer onClose={this.handleClose}>
           <ModalDialog onClose={this.handleClose}>
             <CartWidget/>
+          </ModalDialog>
+        </ModalContainer>
+      }
+      {
+        this.state.modal === "user" && this.state.isShowingModal &&
+        <ModalContainer onClose={this.handleClose}>
+          <ModalDialog onClose={this.handleClose}>
+            <ProfileWidget/>
           </ModalDialog>
         </ModalContainer>
       }
