@@ -10,6 +10,7 @@ import intl from './modules/Intl/IntlReducer';
 import products from './modules/Product/ProductReducer';
 import categories from './modules/Category/CategoryReducer';
 import cart from './modules/Cart/CartReducer';
+import user from './modules/User/UserReducer';
 
 // Combine all reducers into one root reducer
 export default combineReducers({
@@ -19,4 +20,5 @@ export default combineReducers({
   intl,
   categories,
   cart,
+  user,
 });

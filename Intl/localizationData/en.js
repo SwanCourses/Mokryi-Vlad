@@ -41,5 +41,9 @@ export default {
     edit: 'Edit',
     cart: 'Cart',
     order: 'Order',
+    loginForm: 'Sign In',
+    registrationForm: 'Sign Up',
+    userLogin: 'Email',
+    userPassword: 'Password',
   },
 };

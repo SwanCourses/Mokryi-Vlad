@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import styles from './ProductDetailPage.css';
 
 import { addToCart } from '../../../Cart/CartActions'
-
+import { isAdmin } from '../../../../util/apiCaller';
 import { Link } from 'react-router';
 // Import Selectors
 import { getProduct } from '../../ProductReducer';
@@ -70,7 +70,7 @@ export class ProductDetailPage extends Component {
             <div onClick={this.state.color && this.state.size && this.addProductToCart}>
               <FormattedMessage id="order"/>
             </div>
-            <Link to={`/products/${this.props.product.cuid}/edit`}><FormattedMessage id="edit"/></Link>
+            { isAdmin() && <Link to={`/products/${this.props.product.cuid}/edit`}><FormattedMessage id="edit"/></Link>}
           </div>
         </div>
       </div>
